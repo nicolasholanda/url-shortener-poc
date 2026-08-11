@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: url-shortener-poc
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:shortener}
+    username: ${POSTGRES_USER:shortener}
+    password: ${POSTGRES_PASSWORD:shortener}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 500ms
+      lettuce:
+        pool:
+          max-active: 32
+          max-idle: 16
+          min-idle: 4
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+shortener:
+  base-url: ${SHORTENER_BASE_URL:http://localhost:8080}
+  node-id: ${SHORTENER_NODE_ID:1}
+  cache-ttl: ${SHORTENER_CACHE_TTL:PT1H}
+  rate-limit:
+    capacity: ${SHORTENER_RATELIMIT_CAPACITY:20}
+    refill-per-second: ${SHORTENER_RATELIMIT_REFILL_PER_SECOND:5}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.nicolasholanda.urlshortener: INFO

@@ -1,6 +1,7 @@
 package com.nicolasholanda.urlshortener.id;
 
 import com.nicolasholanda.urlshortener.config.AppProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +21,7 @@ public class SnowflakeIdGenerator {
     private long lastTimestamp = -1L;
     private long sequence = 0L;
 
+    @Autowired
     public SnowflakeIdGenerator(AppProperties properties) {
         this(properties.nodeId());
     }
